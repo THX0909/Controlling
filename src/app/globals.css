@@ -1,0 +1,127 @@
+@import "tailwindcss";
+
+/* Design-Tokens: eine Akzentfarbe, Signalfarben nur für Status */
+:root {
+  --bg: #0b0d10;
+  --surface: #111418;
+  --raised: #171b21;
+  --line: #222730;
+  --text: #e6e8eb;
+  --muted: #858c97;
+  --faint: #4b525d;
+  --accent: #5ec4d6;
+  --accent-dim: color-mix(in oklab, var(--accent) 22%, transparent);
+  --ok: #5fcf8a;
+  --warn: #e3b14b;
+  --crit: #ef5a5f;
+  color-scheme: dark;
+}
+
+:root[data-theme="light"] {
+  --bg: #f6f6f4;
+  --surface: #ffffff;
+  --raised: #f0f0ee;
+  --line: #e1e1dd;
+  --text: #16181b;
+  --muted: #646b75;
+  --faint: #a7acb3;
+  --accent: #1b8ea3;
+  --ok: #23955a;
+  --warn: #b07a12;
+  --crit: #cf3a40;
+  color-scheme: light;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-raised: var(--raised);
+  --color-line: var(--line);
+  --color-text: var(--text);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-accent: var(--accent);
+  --color-accent-dim: var(--accent-dim);
+  --color-ok: var(--ok);
+  --color-warn: var(--warn);
+  --color-crit: var(--crit);
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Inter, Roboto, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+}
+
+html,
+body {
+  background: var(--bg);
+  color: var(--text);
+}
+
+body {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Zahlen: Monospace, tabellarisch */
+.num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+.label {
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* Schraffur für "sicherer Forecast" / "geplant" */
+.schraffur {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    var(--accent) 0 2px,
+    color-mix(in oklab, var(--accent) 25%, transparent) 2px 5px
+  );
+}
+
+.geist {
+  background: color-mix(in oklab, var(--accent) 14%, transparent);
+  outline: 1px dashed color-mix(in oklab, var(--accent) 55%, transparent);
+  outline-offset: -1px;
+}
+
+/* Überbuchung: dezentes rotes Pulsieren */
+@keyframes puls {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
+}
+.ueberbucht {
+  animation: puls 1.8s ease-in-out infinite;
+}
+
+/* Animationen abschaltbar (Einstellung oder Systemvorgabe) */
+:root[data-motion="off"] *,
+:root[data-motion="off"] *::before,
+:root[data-motion="off"] *::after {
+  animation: none !important;
+  transition: none !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ueberbucht { animation: none; }
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+kbd {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  padding: 0.05rem 0.35rem;
+  border: 1px solid var(--line);
+  border-bottom-width: 2px;
+  border-radius: 4px;
+  color: var(--muted);
+  background: var(--raised);
+}
