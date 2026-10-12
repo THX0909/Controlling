@@ -1,0 +1,9 @@
+{
+  "name": "Controlling",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:22",
+  "postCreateCommand": "npm ci",
+  "forwardPorts": [3000],
+  "portsAttributes": {
+    "3000": { "label": "App", "onAutoForward": "openBrowser" }
+  }
+}
