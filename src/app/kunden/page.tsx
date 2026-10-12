@@ -8,7 +8,7 @@ import { kundenSicht, leseSzenario, SZENARIEN } from "@/lib/sichten";
 
 export default async function KundenSeite({ searchParams }: { searchParams: Promise<{ szenario?: string }> }) {
   const szenario = leseSzenario((await searchParams).szenario);
-  const zeilen = kundenSicht(holeStand(), JAHR, szenario).sort(
+  const zeilen = kundenSicht(await holeStand(), JAHR, szenario).sort(
     (a, b) => a.kunde.abc.localeCompare(b.kunde.abc) || a.kunde.name.localeCompare(b.kunde.name),
   );
   const fcSpalte = { sicher: "sicherCent", gewichtet: "gewichtetCent", best: "bestCent" } as const;
@@ -16,7 +16,7 @@ export default async function KundenSeite({ searchParams }: { searchParams: Prom
   return (
     <div className="space-y-6">
       <SeitenKopf
-        titel="Kunden"
+        titel="Kundensicht"
         unter={`Umsatz ${JAHR}: Ist + Forecast gegen Ziel. Reisekosten separat ausgewiesen.`}
         rechts={
           <Umschalter

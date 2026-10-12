@@ -10,8 +10,8 @@ import { formatEuro, formatEuroKurz, formatProzent, quoteBp } from "@/domain/zah
 import { AKTUELLER_MONAT, holeStand, JAHR, LETZTER_ABSCHLUSS } from "@/lib/daten";
 import { beauftragungsSicht, kundenSicht } from "@/lib/sichten";
 
-export default function Dashboard() {
-  const stand = holeStand();
+export default async function Dashboard() {
+  const stand = await holeStand();
   const jahr = monateImJahr(JAHR);
   const ist = summiere(stand.zeilen, stand.posten, "sicher", { monate: jahr, abgeschlossen: true });
   const fc = {

@@ -14,11 +14,21 @@ npm run typecheck
 npm run build
 ```
 
-## Stand: Phase 1 – klickbarer Prototyp
+## Stand
 
-- Seed-Daten im Speicher (`src/seed/daten.ts`), Stichtag Okt 2026, Jan–Sep abgeschlossen
-- Seiten: Dashboard, Auslastung (Heatmap), Kunden, Kundendetail
-- Designsystem: Energieleiste, XP-Leiste, Segmentleiste, ABC-Rang, Befehlspalette (⌘K), Tastenkürzel (`g d`, `g a`, `g k`, `m`, `?`), Animationen und helles Theme abschaltbar
+**Phase 1 – Prototyp:** Seed-Daten (`src/seed/daten.ts`), Stichtag Okt 2026, Jan–Sep abgeschlossen. Designsystem mit Energieleiste, XP-Leiste, Segmentleiste, ABC-Rang, Befehlspalette (⌘K), Tastenkürzel (`?` zeigt alle), abschaltbaren Animationen und hellem Theme.
+
+**Navigation**
+
+| Bereich | Seite | Inhalt |
+|---|---|---|
+| Auswertungen | Übersicht | Kennzahlen, Team-Auslastung, Umsatzziele, laufende Beauftragungen |
+| | Auslastung | Heatmap MA × Monat: PT, darunter Auslastung in % |
+| | Kundensicht | Umsatz Ist/Forecast vs. Ziel, DB, Reisekosten; Detail je Kunde |
+| Stammdaten | Kunden & Projekte | Kunde → Projekt → Beauftragung → Zuordnung MA (inkl. Folgebeauftragung) |
+| | Mitarbeiter | intern/extern, Einkaufssatz, Teilzeit |
+
+**Datenspeicher (Übergang bis Datenbank):** Änderungen landen in `.daten/bestand.json` (nicht im Git). Fehlt die Datei, starten die Seed-Daten. Zurücksetzen: Datei löschen. Pfad über `DATEN_DATEI` änderbar. Noch ohne Login und Rollen – nur lokal bzw. im Codespace nutzen.
 
 ## Aufbau
 
@@ -41,6 +51,11 @@ npm run build
 - **Forecast**: *sicher* = Ist + beauftragt; *gewichtet* = sicher + erwartet × Wahrscheinlichkeit; *Best Case* = alles inkl. Optionen.
 - **Kapazität** = Arbeitstage (Mo–Fr ohne Feiertage BW) × Teilzeitfaktor − Abwesenheit.
 - **Auslastung** = gebuchte PT / Kapazität; Optionen zählen nie.
+
+## Noch nicht enthalten
+
+- Plan-PT je Monat bearbeiten (Drag & Drop), Partner und Partnerregeln pflegen, Abwesenheiten pflegen
+- Login, Rollen, Row Level Security, Audit-Log (Phase 2/5)
 
 ## Offene fachliche Punkte
 

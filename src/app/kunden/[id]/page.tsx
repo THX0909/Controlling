@@ -44,7 +44,7 @@ export default async function KundeSeite({
 }) {
   const { id } = await params;
   const szenario = leseSzenario((await searchParams).szenario);
-  const stand = holeStand();
+  const stand = await holeStand();
   const kunde = stand.index.kunde.get(id);
   if (!kunde) notFound();
 
@@ -69,7 +69,7 @@ export default async function KundeSeite({
     <div className="space-y-10">
       <div className="space-y-4">
         <Link href={`/kunden?szenario=${szenario}`} className="text-xs text-muted hover:text-text">
-          ← Kunden
+          ← Kundensicht
         </Link>
         <SeitenKopf
           titel={kunde.name}
@@ -77,6 +77,9 @@ export default async function KundeSeite({
             <span className="inline-flex items-center gap-3">
               <Rang abc={kunde.abc} />
               <span>{reiseText(kunde.reiseregel)}</span>
+              <Link href={`/stammdaten/kunden/${id}`} className="text-xs hover:text-text">
+                Stammdaten bearbeiten →
+              </Link>
             </span>
           }
           rechts={

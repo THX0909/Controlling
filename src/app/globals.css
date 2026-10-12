@@ -125,3 +125,13 @@ kbd {
   color: var(--muted);
   background: var(--raised);
 }
+
+/* Bedingte Formularfelder ohne JavaScript */
+[data-wenn] { display: none; }
+form:has(select[name="status"] option[value="erwartet"]:checked) [data-wenn="erwartet"],
+form:has(select[name="abrechnung"] option[value="festpreis"]:checked) [data-wenn="festpreis"],
+form:has(select[name="art"] option[value="extern"]:checked) [data-wenn="extern"],
+form:has(select[name="reiseart"] option[value="pro_tag"]:checked) [data-wenn="reise"],
+form:has(select[name="reiseart"] option[value="pro_monat"]:checked) [data-wenn="reise"] {
+  display: block;
+}

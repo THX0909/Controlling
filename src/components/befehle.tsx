@@ -4,6 +4,9 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useEinstellungen } from "./einstellungen";
+import { NAVIGATION } from "./navigation";
+
+const SEITEN = NAVIGATION.flatMap((g) => g.eintraege.filter((e) => !e.folgt).map((e) => ({ ...e, gruppe: g.gruppe })));
 
 interface Befehl {
   id: string;
@@ -15,9 +18,7 @@ interface Befehl {
 
 const KUERZEL: [string, string][] = [
   ["⌘K / Strg K", "Befehlspalette"],
-  ["g d", "Dashboard"],
-  ["g a", "Auslastung"],
-  ["g k", "Kunden"],
+  ...SEITEN.filter((s) => s.taste).map((s): [string, string] => [`g ${s.taste}`, s.text]),
   ["m", "Animationen an/aus"],
   ["?", "Tastenkürzel"],
 ];
@@ -37,10 +38,19 @@ export function Befehlspalette({ kunden }: { kunden: { id: string; name: string 
 
   const befehle = useMemo<Befehl[]>(
     () => [
-      { id: "nav-d", gruppe: "Navigation", text: "Dashboard", kuerzel: "g d", aktion: () => router.push("/") },
-      { id: "nav-a", gruppe: "Navigation", text: "Auslastung", kuerzel: "g a", aktion: () => router.push("/auslastung") },
-      { id: "nav-k", gruppe: "Navigation", text: "Kunden", kuerzel: "g k", aktion: () => router.push("/kunden") },
-      ...kunden.map((k) => ({ id: `k-${k.id}`, gruppe: "Kunden", text: k.name, aktion: () => router.push(`/kunden/${k.id}`) })),
+      ...SEITEN.map((s) => ({
+        id: `nav-${s.href}`,
+        gruppe: s.gruppe,
+        text: s.text,
+        kuerzel: s.taste && `g ${s.taste}`,
+        aktion: () => router.push(s.href),
+      })),
+      { id: "neu-kunde", gruppe: "Anlegen", text: "Neuer Kunde", aktion: () => router.push("/stammdaten/kunden#neu") },
+      { id: "neu-ma", gruppe: "Anlegen", text: "Neuer Mitarbeiter", aktion: () => router.push("/stammdaten/mitarbeiter#neu") },
+      ...kunden.flatMap((k) => [
+        { id: `k-${k.id}`, gruppe: "Kundensicht", text: k.name, aktion: () => router.push(`/kunden/${k.id}`) },
+        { id: `s-${k.id}`, gruppe: "Stammdaten", text: k.name, aktion: () => router.push(`/stammdaten/kunden/${k.id}`) },
+      ]),
       { id: "anim", gruppe: "Einstellungen", text: animationen ? "Animationen aus" : "Animationen an", kuerzel: "m", aktion: () => setAnimationen(!animationen) },
       { id: "theme", gruppe: "Einstellungen", text: theme === "dark" ? "Helles Theme" : "Dunkles Theme", aktion: () => setTheme(theme === "dark" ? "light" : "dark") },
       { id: "hilfe", gruppe: "Einstellungen", text: "Tastenkürzel anzeigen", kuerzel: "?", aktion: () => setHilfe(true) },
@@ -58,7 +68,7 @@ export function Befehlspalette({ kunden }: { kunden: { id: string; name: string 
   useEffect(() => {
     let wartetAufG = false;
     let timer: ReturnType<typeof setTimeout> | undefined;
-    const ziele: Record<string, string> = { d: "/", a: "/auslastung", k: "/kunden" };
+    const ziele = Object.fromEntries(SEITEN.filter((s) => s.taste).map((s) => [s.taste!, s.href]));
 
     function taste(e: KeyboardEvent) {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
